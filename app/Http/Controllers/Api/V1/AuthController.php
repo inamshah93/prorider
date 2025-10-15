@@ -6,6 +6,8 @@ use App\Http\Requests\Api\RegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
 
 class AuthController extends Controller
 {
@@ -30,4 +32,52 @@ class AuthController extends Controller
             'user' => $user,
         ]);
     }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid credentials',
+            ], 401);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Login successful',
+            'token' => $token,
+            'user' => $user,
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Logged out successfully'
+        ]);
+    }
+
+    public function profile(Request $request)
+    {
+        return response()->json([
+            'status' => true,
+            'message' => 'Login successful',
+            'user' => $request->user()
+        ]);
+    }
+
+
+
 }
