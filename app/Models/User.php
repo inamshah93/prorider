@@ -25,14 +25,8 @@ class User extends Authenticatable
         'phone',
         'password',
         'role',
-        'is_active',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
@@ -49,5 +43,29 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function riderProfile()
+    {
+        return $this->hasOne(RiderProfile::class);
+    }
+
+    public function senderProfile()
+    {
+        return $this->hasOne(SenderProfile::class);
+    }
+
+    public function sentOrders()
+    {
+        return $this->hasMany(Order::class, 'sender_id');
+    }
+
+    public function deliveredOrders()
+    {
+        return $this->hasMany(Order::class, 'rider_id');
+    }
+    public function receivers()
+    {
+        return $this->hasMany(Receiver::class);
     }
 }

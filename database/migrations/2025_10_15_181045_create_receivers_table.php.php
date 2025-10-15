@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('receivers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete(); // sender reference
+            $table->string('name');
+            $table->string('phone');
+            $table->string('address')->nullable();
+            $table->foreignId('zone_id')->nullable()->constrained('zones')->nullOnDelete(); // optional
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('receivers');

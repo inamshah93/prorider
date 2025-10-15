@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\SenderController;
+use App\Http\Controllers\Api\V1\OrderController;
+use App\Http\Controllers\Api\V1\ReceiverController;
 use App\Http\Controllers\NotificationController;
 
 Route::prefix('v1')->group(function () {
@@ -14,16 +17,28 @@ Route::prefix('v1')->group(function () {
 // Route::post('/restore-user', [AuthController::class, 'userRestore']);
 // routes/api.php
     Route::post('test-notification', [NotificationController::class, 'sendPushNotification'])->middleware('auth:sanctum');
-});
+    Route::middleware(['auth:sanctum'])->group(function () {
 
-//
-Route::middleware('auth:sanctum')->group(function () {
-    Route::controller(AuthController::class)->group(function () {
-        Route::prefix('v1')->group(function () {
-
+        Route::controller(AuthController::class)->group(function () {
             Route::post('/logout', 'logout');
             Route::get('/profile', 'profile');
         });
 
+        Route::controller(SenderController::class)->group(function () {
+            Route::put('sender/profile', 'updateProfile');
+            Route::get('sender/profile', 'profile');
+        });
+
+        Route::controller(OrderController::class)->group(function () {
+            Route::get('orders', 'index');            // list sender's orders
+            Route::post('orders', 'store');          // create order
+            Route::get('orders/{id}', 'show');      // view order
+            Route::post('orders/{id}/cancel', 'cancel'); // sender cancels
+        });
+
+        Route::apiResource('receivers', ReceiverController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+
     });
+
 });
+
