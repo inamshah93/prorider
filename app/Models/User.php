@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Receiver::class);
     }
+
+    public function pickupLocations()
+    {
+        return $this->hasMany(PickupLocation::class);
+    }
 }

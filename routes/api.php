@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\SenderController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\ReceiverController;
+use App\Http\Controllers\Api\V1\PickupLocationController;
 use App\Http\Controllers\NotificationController;
 
 Route::prefix('v1')->group(function () {
@@ -38,7 +39,19 @@ Route::prefix('v1')->group(function () {
 
         Route::apiResource('receivers', ReceiverController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
 
+        Route::controller(PickupLocationController::class)->group(function () {
+            Route::get('pickup-locations',  'index');
+            Route::post('pickup-locations',  'store');
+            Route::put('pickup-locations/{id}', 'update');
+            Route::post('pickup-locations/{id}/make-default',  'makeDefault');
+            Route::delete('pickup-locations/{id}',  'destroy');
+        });
+        // Route::post('orders/{orderId}/assign-rider', [RiderController::class, 'assignRider']);
+        // Route::post('rider/scan', [RiderScanController::class, 'receiveByScan']);
+
     });
+
+
 
 });
 

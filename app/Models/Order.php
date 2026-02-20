@@ -8,7 +8,7 @@ class Order extends Model
 {
     protected $fillable = [
         'sender_id',
-        'supplier_id',
+        'rider_id',
         'pickup_location_id',
         'receiver_id',
         'tracking_number',
@@ -29,9 +29,9 @@ class Order extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'sender_id');
     }
-    public function supplier()
+    public function rider()
     {
-        return $this->belongsTo(\App\Models\User::class, 'supplier_id');
+        return $this->belongsTo(\App\Models\User::class, 'rider_id');
     }
     public function pickupLocation()
     {

@@ -12,12 +12,17 @@ class SenderProfile extends Model
     protected $fillable = [
         'user_id',
         'business_name',
-        'pickup_address',
+        'default_pickup_location_id',
         'contact_person',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function defaultPickupLocation()
+    {
+        return $this->belongsTo(PickupLocation::class, 'default_pickup_location_id');
     }
 }

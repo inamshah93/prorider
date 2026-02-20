@@ -20,6 +20,7 @@ class UpdateSenderProfileRequest extends FormRequest
             'phone' => 'sometimes|required|string|max:20',
             'business_name' => 'nullable|string|max:255',
             'pickup_address' => 'nullable|string|max:1000',
+            'contact_person' => 'nullable|string|max:1000',
             'password' => 'nullable|string|min:6|confirmed',
         ];
     }
